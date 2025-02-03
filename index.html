@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Tâches</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .task { margin: 10px 0; }
+        .task-title { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Gestionnaire de Tâches</h1>
+    <div id="task-list"></div>
+    <input type="text" id="task-title" placeholder="Titre de la tâche">
+    <input type="text" id="task-description" placeholder="Description de la tâche">
+    <button onclick="addTask()">Ajouter une tâche</button>
+
+    <script>
+        let tasks = [];
+
+        function displayTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+                taskDiv.innerHTML = `
+                    <span class="task-title">${task.title} - ${task.status}</span>
+                    <p>Description: ${task.description}</p>
+                    <button onclick="editTask(${index})">Modifier</button>
+                    <button onclick="deleteTask(${index})">Supprimer</button>
+                `;
+                taskList.appendChild(taskDiv);
+            });
+        }
+
+        function addTask() {
+            const title = document.getElementById('task-title').value;
+            const description = document.getElementById('task-description').value;
+            const task = { title, description, status: 'À faire' };
+            tasks.push(task);
+            displayTasks();
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-description').value = '';
+        }
+
+        function editTask(index) {
+            const task = tasks[index];
+            const newTitle = prompt("Nouveau titre:", task.title);
+            const newDescription = prompt("Nouvelle description:", task.description);
+            const newStatus = prompt("Nouveau statut (À faire/En cours/Terminé):", task.status);
+            if (newTitle) task.title = newTitle;
+            if (newDescription) task.description = newDescription;
+            if (newStatus) task.status = newStatus;
+            displayTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+    </script>
+</body>
+</html>
